@@ -12,37 +12,48 @@ import java.util.Arrays;
 
 /**
  * La classe serveur nous permet d'établir la connexion avec un client, d'attendre les commandes de
- * celui-çi, de lister les différents cours disponibles selon la session désirée et
+ * celui-ci, de lister les différents cours disponibles selon la session désirée et
  * d'exécuter l'inscription d'un étudiant.
  */
 public class Server {
 
     /**
-     * Chaînes de caractères permettant  de reconnaître quelle commande
-     * doit être exécuter.
+     * Chaîne de caractères pour l'inscription
      */
-
     public final static String REGISTER_COMMAND = "INSCRIRE";
-    public final static String LOAD_COMMAND = "CHARGER";
-
     /**
-     * L'objet Socket va nous permettre d'ouvrir une connexion
-     * sur notre serveur.
+     * Chaîne de caractères pour le chargement des cours
+     */
+    public final static String LOAD_COMMAND = "CHARGER";
+    /**
+     * Le Socket pour ouvrir une connexion au serveur
      */
     private final ServerSocket server;
+    /**
+     * Le Socket pour la connexion avec le client
+     */
     private Socket client;
+    /**
+     * Objet pour lire des informations d'un fichier de cours ou d'inscriptions
+     */
     private ObjectInputStream objectInputStream;
+    /**
+     * Objet pour écrire dans le fichier d'inscriptions
+     */
     private ObjectOutputStream objectOutputStream;
+    /**
+     * La liste de manipulateurs d'événements
+     */
     private final ArrayList<EventHandler> handlers;
 
     /**
-     *Constructeur permettant l'initialisation de la connexion au serveur sur le port passé en paramètre, de créer le
-     *tableau allant contenir les "EventHandler" et ajouter ceux-ci dans le tableau "handlers".
+     *Constructeur permettant l'initialisation de la connexion au serveur sur le 
+     *port passé en paramètre, de créer le tableau allant contenir les 
+     *"EventHandler" et ajouter ceux-ci dans le tableau "handlers".
      *
      * @param port  Port sur lequel le serveur va être créé.
      * @throws IOException  Erreur d'entrée/sortie en générale.
      */
-
     public Server(int port) throws IOException {
         this.server = new ServerSocket(port, 1);
         this.handlers = new ArrayList<EventHandler>();
@@ -62,8 +73,8 @@ public class Server {
      * Cette méthode informe les "EventHandlers" que la commande reçu en paramètre doit être traîtée.
      *
      * @param cmd   Une chaîne de caractères représentant la commande du client.
-     * @param arg   Une chaîne de caractères représentant pour quelle session le client souhaite que la commande
-     *              soit exécutée.
+     * @param arg   Une chaîne de caractères représentant pour quelle session le
+     *  client souhaite que la commande soit exécutée.
      */
     private void alertHandlers(String cmd, String arg) {
         for (EventHandler h : this.handlers) {
@@ -72,11 +83,13 @@ public class Server {
     }
 
     /**
-     * Méthode qui attend qu'une connexion soit établit avec un client, pour ensuite afficher des informations sur le
-     * client, recevoir des données de celui-ci et en renvoyer en fonction des données reçues par le client.
-     * Ce processus va continuer tant que le client est connecté.
-     * Dès que le client se déconnecte, on affiche la chaîne de caractère "Client déconnecté" et le serveur se ferme.
-     * De plus, si une exception survient, elle est attrapée.
+     * Méthode qui attend qu'une connexion soit établit avec un client, pour 
+     * ensuite afficher des informations sur le client, recevoir des données de 
+     * celui-ci et en renvoyer en fonction des données reçues par le client. Ce 
+     * processus va continuer tant que le client est connecté. Dès que le client 
+     * se déconnecte, on affiche la chaîne de caractère "Client déconnecté" et 
+     * le serveur se ferme. De plus, si une exception survient, elle est 
+     * attrapée.
      */
     public void run() {
         while (true) {
@@ -95,11 +108,12 @@ public class Server {
     }
 
     /**
-     * Méthode permettant le démarrage de la boucle d'évènement en attendant qu'une connexion avec un client soit
-     * établit.
+     * Méthode permettant le démarrage de la boucle d'évènement en attendant 
+     * qu'une connexion avec un client soit établie.
      *
-     * @throws IOException  Erreur d'entrée/sortie en générale.
-     * @throws ClassNotFoundException   La classe demandé n'a pas pu être trouvé. (+++)
+     * @throws IOException  Erreur d'entrée/sortie en général.
+     * @throws ClassNotFoundException   La classe demandée (RegistrationForm) 
+     * n'a pas pu être trouvée.
      */
 
     public void listen() throws IOException, ClassNotFoundException {
@@ -113,16 +127,13 @@ public class Server {
     }
 
     /**
-     * Méthode qui va  créer le tableau "parts" avec la chaîne de caractères reçu en argument, où chaque case
-     * va contenir un mot de cette chaîne, pour par la suite déclarer(?) la chaîne de caractère "cmd" par le mot à
-     * l'index 0 du tableau "parts" et joindre toutes les cases sauf celle à l'index 0, avec des espaces entre chaque
-     * mot qui va être utilisé pour déclarer la chaîne de caractère "args".
-     * La méthode se termine en retournant une nouvelle paire(?) avec "cmd" et "args" en paramètre.
+     * La méthode reçoit une ligne de commande du client et sépare la commande
+     * et les arguments pour créer une paire contenant ces deux éléments.
      *
-     * @param line Chaîne de caractères reçu par le client que l'on doit interpréter.
-     * @return  La commande qui doit être exécutée et la session pour laquelle la commande va etre exécutée.
-     *
-     * ??? Est-ce que args peut être autre chose que des session???
+     * @param line Chaîne de caractères reçu par le client que l'on doit 
+     * interpréter.
+     * @return  La commande qui doit être exécutée et la session pour 
+     * laquelle la commande va etre exécutée.
      */
     public Pair<String, String> processCommandLine(String line) {
         String[] parts = line.split(" ");
@@ -130,13 +141,25 @@ public class Server {
         String args = String.join(" ", Arrays.asList(parts).subList(1, parts.length));
         return new Pair<>(cmd, args);
     }
-
+    /**
+     * Méthode pour fermer toutes les connexions, c'est-à-dire celle du client
+     * et celles des "streams". 
+     * 
+     * @throws IOException Une erreur en cas de fermeture des connexions
+     */
     public void disconnect() throws IOException {
         objectOutputStream.close();
         objectInputStream.close();
         client.close();
     }
-
+    /**
+     * La méthode fait l'appel à la fonction correspondante, soit pour inscrire
+     * un client ou pour charger la liste de cours.
+     * 
+     * @param cmd Correspond à la demande faite par le client (Inscrire ou 
+     * charger)
+     * @param arg Correspond à la session dans le cas du chargement de cours
+     */
     public void handleEvents(String cmd, String arg) {
         if (cmd.equals(REGISTER_COMMAND)) {
             handleRegistration();
@@ -146,7 +169,7 @@ public class Server {
     }
 
     /**
-     Lire un fichier texte contenant des informations sur les cours et les transofmer en liste d'objets 'Course'.
+     Lire un fichier texte contenant des informations sur les cours et les transformer en liste d'objets 'Course'.
      La méthode filtre les cours par la session spécifiée en argument.
      Ensuite, elle renvoie la liste des cours pour une session au client en utilisant l'objet 'objectOutputStream'.
      La méthode gère les exceptions si une erreur se produit lors de la lecture du fichier ou de l'écriture de l'objet dans le flux.
