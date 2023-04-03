@@ -2,6 +2,7 @@ package server;
 
 import javafx.util.Pair;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,7 +10,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
+import java.io.File;
 
+import server.models.Course;
 /**
  * La classe serveur nous permet d'établir la connexion avec un client, d'attendre les commandes de
  * celui-ci, de lister les différents cours disponibles selon la session désirée et
@@ -177,6 +181,26 @@ public class Server {
      */
     public void handleLoadCourses(String arg) {
         // TODO: implémenter cette méthode
+        try {
+            Scanner scan = new Scanner(new File("data\\cours.txt"));
+            ArrayList<Course> liste_cours = new ArrayList<Course>();
+            while (scan.hasNextLine()){
+                String ligne = scan.nextLine();
+
+                String[] data_cours = ligne.split("\t",3);
+                liste_cours.add(new Course(data_cours[1], data_cours[0],data_cours[2]));
+            }
+
+            // Renvoyer au client plutôt que de println 
+            for (Course cours : liste_cours){
+                if (cours.getSession() == arg){
+                    System.out.println(cours.toString());
+                }
+            }
+            scan.close();
+        } catch  (FileNotFoundException e) {
+            System.out.println("Erreur. Fichier non-trouvé.");
+        }
     }
 
     /**
