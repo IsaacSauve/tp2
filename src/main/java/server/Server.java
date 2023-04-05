@@ -193,8 +193,12 @@ public class Server {
 
             // Renvoyer au client plutôt que de println 
             for (Course cours : liste_cours){
-                if (cours.getSession() == arg){
-                    System.out.println(cours.toString());
+                if (cours.getSession().equals(arg)){
+                    try {
+                        this.objectOutputStream.writeObject(cours);
+                    } catch (IOException e){
+                        System.out.println("Erreur à l'écriture de l'objet.");
+                    }
                 }
             }
             scan.close();
