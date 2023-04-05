@@ -3,6 +3,8 @@ package server;
 import javafx.util.Pair;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,9 +13,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.io.BufferedWriter;
 import java.io.File;
 
 import server.models.Course;
+import server.models.RegistrationForm;
 /**
  * La classe serveur nous permet d'établir la connexion avec un client, d'attendre les commandes de
  * celui-ci, de lister les différents cours disponibles selon la session désirée et
@@ -182,7 +186,7 @@ public class Server {
     public void handleLoadCourses(String arg) {
         // TODO: implémenter cette méthode
         try {
-            Scanner scan = new Scanner(new File("data\\cours.txt"));
+            Scanner scan = new Scanner(new File("server\\data\\cours.txt"));
             ArrayList<Course> liste_cours = new ArrayList<Course>();
             while (scan.hasNextLine()){
                 String ligne = scan.nextLine();
@@ -191,7 +195,7 @@ public class Server {
                 liste_cours.add(new Course(data_cours[1], data_cours[0],data_cours[2]));
             }
 
-            // Renvoyer au client plutôt que de println 
+ 
             for (Course cours : liste_cours){
                 if (cours.getSession().equals(arg)){
                     try {
@@ -214,6 +218,29 @@ public class Server {
      */
     public void handleRegistration() {
         // TODO: implémenter cette méthode
+        try {
+            RegistrationForm rf = (RegistrationForm) this.objectInputStream.readObject();
+            
+            try {
+                FileOutputStream fw = new FileOutputStream("server\\data\\inscription.txt",true);
+                
+                String inscription = rf.getCourse().getSession() + "\t" 
+                + rf.getCourse().getCode() + "\t" + rf.getMatricule() + "\t" 
+                + rf.getPrenom() + "\t" + rf.getNom() + "\t" + rf.getEmail() + "\n";
+
+                fw.write(inscription.getBytes());
+                fw.close();
+
+            } catch (IOException e) {
+                System.out.println("Erreur à l'écriture du fichier");
+            }
+
+        } catch (IOException e) {
+            //System.out.println("Erreur à la lecture de l'objet");
+        } catch (ClassNotFoundException e) {
+            //System.out.println("Erreur. La classe n'a pas été trouvée.");
+        }
+        
     }
 }
 
