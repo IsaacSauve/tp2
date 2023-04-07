@@ -23,7 +23,8 @@ public class Client {
 
             while(sc.hasNext()){
                 String line=sc.nextLine();
-                bw.append(line + "\n");
+                bw.append(line);
+                bw.flush();
 
                 if (line.equals("CHARGER")){
                     System.out.println(is.getEncoding());
