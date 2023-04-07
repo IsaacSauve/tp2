@@ -11,31 +11,40 @@ public class Client {
         try{
             Socket clientSocket= new Socket("127.0.0.1", 80);
 
-            OutputStreamWriter os = new OutputStreamWriter(
+            ObjectOutputStream os = new ObjectOutputStream(
                     clientSocket.getOutputStream());
-
-            BufferedWriter bw = new BufferedWriter(os);
+            
+            //BufferedWriter bw = new BufferedWriter(os);
 
             Scanner sc = new Scanner(System.in);
 
-            InputStreamReader is = new InputStreamReader(
+            ObjectInputStream is = new ObjectInputStream(
                     clientSocket.getInputStream());
 
+            //BufferedReader br = new BufferedReader(is);
+            
             while(sc.hasNext()){
                 String line=sc.nextLine();
-                bw.append(line);
-                bw.flush();
+                os.writeObject(line);
+                os.flush();
+                //bw.append(line);
+                //bw.flush();
 
                 if (line.equals("CHARGER")){
-                    System.out.println(is.getEncoding());
-                }
+                    try {
+                        System.out.println(is.readObject().toString());
+                        } catch (ClassNotFoundException e) {
+                        System.out.println("La classe est introuvable");
+                        }
+                    
+                    }
 
                 if (line.equals("EXIT")){
                     break;
                 }
 
             }
-            bw.close();
+            os.close();
             is.close();
             sc.close();
             clientSocket.close();
