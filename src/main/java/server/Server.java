@@ -183,6 +183,22 @@ public class Server {
      */
     public void handleLoadCourses(String arg) {
         // TODO: implémenter cette méthode
+
+        switch(arg){
+            case "1":
+                arg = "Automne";
+                break;
+
+            case "2":
+                arg = "Hiver";
+                break;
+            
+            case "3":
+                arg = "Ete";
+                break;
+            
+        }
+
         try {
             Scanner scan = new Scanner(new File("server\\data\\cours.txt"));
             ArrayList<Course> liste_cours = new ArrayList<Course>();
@@ -192,17 +208,19 @@ public class Server {
                 String[] data_cours = ligne.split("\t",3);
                 liste_cours.add(new Course(data_cours[1], data_cours[0],data_cours[2]));
             }
+            ArrayList<Course> cours_session = new ArrayList<Course>();
 
- 
             for (Course cours : liste_cours){
                 if (cours.getSession().equals(arg)){
-                    try {
-                        this.objectOutputStream.writeObject(cours);
-                    } catch (IOException e){
-                        System.out.println("Erreur à l'écriture de l'objet.");
-                    }
+                    cours_session.add(cours);
                 }
             }
+            try {
+                this.objectOutputStream.writeObject(cours_session);
+            } catch (IOException e){
+                System.out.println("Erreur à l'écriture de l'objet.");
+            }
+
             scan.close();
         } catch  (FileNotFoundException e) {
             System.out.println("Erreur. Fichier non-trouvé.");
