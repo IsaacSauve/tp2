@@ -4,7 +4,6 @@ import javafx.util.Pair;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -13,7 +12,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.io.BufferedWriter;
 import java.io.File;
 
 import server.models.Course;
@@ -236,9 +234,9 @@ public class Server {
             }
 
         } catch (IOException e) {
-            //System.out.println("Erreur à la lecture de l'objet");
+            System.out.println("Erreur à la lecture de l'objet");
         } catch (ClassNotFoundException e) {
-            //System.out.println("Erreur. La classe n'a pas été trouvée.");
+            System.out.println("Erreur. La classe n'a pas été trouvée.");
         }
         
     }
