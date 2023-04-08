@@ -16,34 +16,36 @@ public class Client {
         "2.Hiver \n 3.Été \n > Choix: ";
 
         System.out.print(messageConsultation);
-        String REGISTER_COMMAND = "INSCRIRE ";
+        //String REGISTER_COMMAND = "INSCRIRE ";
         String LOAD_COMMAND = "CHARGER ";
-        Scanner sc = new Scanner(System.in);
 
         try{
             Socket clientSocket= new Socket("127.0.0.1", 80);
             
-            ObjectInputStream is = new ObjectInputStream(
-                clientSocket.getInputStream());
+            ObjectInputStream is = new ObjectInputStream(clientSocket.getInputStream());
 
-            ObjectOutputStream os = new ObjectOutputStream(
-                clientSocket.getOutputStream());
+            ObjectOutputStream os = new ObjectOutputStream(clientSocket.getOutputStream());
+            
+            Scanner sc = new Scanner(System.in);
             
             while(sc.hasNext()){
-                String line = sc.nextLine();
-                os.writeObject(LOAD_COMMAND + line);
-                os.flush();
 
+                String line = sc.nextLine();
+                String command = LOAD_COMMAND + line;
+                os.writeObject(command);
+                os.flush();
+                
                 try {
                     System.out.println(is.readObject().toString());
 
                 } catch (ClassNotFoundException e) {
                     System.out.println("La classe est introuvable");
-                } 
+                }
 
                 if (line.equals("EXIT")){
                     break;
-                }  
+                }
+            
             }
             os.close();
             is.close();

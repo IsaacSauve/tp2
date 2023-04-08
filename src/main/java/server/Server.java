@@ -202,6 +202,7 @@ public class Server {
         try {
             Scanner scan = new Scanner(new File("server\\data\\cours.txt"));
             ArrayList<Course> liste_cours = new ArrayList<Course>();
+
             while (scan.hasNextLine()){
                 String ligne = scan.nextLine();
 
@@ -215,15 +216,16 @@ public class Server {
                     cours_session.add(cours);
                 }
             }
-            try {
-                this.objectOutputStream.writeObject(cours_session);
-            } catch (IOException e){
-                System.out.println("Erreur à l'écriture de l'objet.");
-            }
+            
+            this.objectOutputStream.writeObject(cours_session);
+            this.objectOutputStream.flush();
 
             scan.close();
+            
         } catch  (FileNotFoundException e) {
             System.out.println("Erreur. Fichier non-trouvé.");
+        } catch (IOException e){
+            System.out.println("Erreur à l'écriture de l'objet.");
         }
     }
 
