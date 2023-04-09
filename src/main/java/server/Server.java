@@ -200,7 +200,7 @@ public class Server {
         }
 
         try {
-            Scanner scan = new Scanner(new File("server\\data\\cours.txt"));
+            Scanner scan = new Scanner(new File("server/data/cours.txt"));
             ArrayList<Course> liste_cours = new ArrayList<Course>();
 
             while (scan.hasNextLine()){
@@ -240,7 +240,7 @@ public class Server {
             RegistrationForm rf = (RegistrationForm) this.objectInputStream.readObject();
             
             try {
-                FileOutputStream fw = new FileOutputStream("server\\data\\inscription.txt",true);
+                FileOutputStream fw = new FileOutputStream("server/data/inscription.txt",true);
                 
                 String inscription = rf.getCourse().getSession() + "\t" 
                 + rf.getCourse().getCode() + "\t" + rf.getMatricule() + "\t" 
