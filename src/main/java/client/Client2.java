@@ -30,7 +30,7 @@ public class Client2 {
 
         String LOAD_COMMAND = "CHARGER ";
 
-        while(scan.hasNext()){
+        
             String line = scan.nextLine();
 
 
@@ -59,11 +59,7 @@ public class Client2 {
                 
             }catch(ClassNotFoundException e){
                 System.out.println("Erreur classe non-trouvée.");
-            }
-
-        }
-        
-        
+            }  
         
     }
     public void inscrire(){
@@ -82,22 +78,34 @@ public class Client2 {
 
         System.out.println("*** Bienvenue au portail d'inscription de cours " +
         "de l'UDEM ***");
-        System.out.println("> Choix: ");
-        System.out.print("1. Consulter les cours offerts pour une " +
-        "autre session \n 2. Inscription à un cours: \n > Choix: ");
-
-        String choix = scan.nextLine();
-        
         
         try {
 
-            if (choix.equals("1")){
-                client.charger(scan);
-            }
-            if (choix.equals("2")){
-                client.inscrire();
-            }
+            client.charger(scan);
+            System.out.println("> Choix: ");
+            System.out.print("1. Consulter les cours offerts pour une " +
+            "autre session \n 2. Inscription à un cours: \n > Choix: ");
 
+            while (scan.hasNext()){
+
+                String choix = scan.nextLine();
+
+
+                if (choix.equals("1")){
+                    client.charger(scan);
+                }
+                if (choix.equals("2")){
+                    client.inscrire();
+                }
+
+                if (choix.equals("exit")){
+                    break;    
+                }
+                System.out.println("> Choix: ");
+                System.out.print("1. Consulter les cours offerts pour une " +
+                "autre session \n 2. Inscription à un cours: \n > Choix: ");
+                
+            }
             scan.close();
             client.deconnecter();
             
