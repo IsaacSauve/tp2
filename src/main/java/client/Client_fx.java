@@ -2,6 +2,7 @@ package client;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,9 +19,23 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import server.Server;
 import server.models.Course;
+import mvc.Controleur;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class Client_fx extends Application{
+
+    String[] sessions = {"Hiver","Ete","Automne"};
+    ComboBox<String> combo_sessions = new ComboBox<String>(
+            FXCollections.observableArrayList(sessions));
+
+    private Button boutonCharger = new Button("charger");
+
+    private Controleur controleur = new Controleur();
+
 
     public void start(Stage primaryStage){
         HBox root = new HBox();
@@ -62,6 +77,12 @@ public class Client_fx extends Application{
         col_2.setPrefWidth(175);
         table_cours.getColumns().add(col_1);
         table_cours.getColumns().add(col_2);
+
+        boutonCharger.setOnAction((action) -> {
+            ArrayList<Course> liste_cours = controleur.charger();
+            ObservableList<Course> liste_cours_visibles = FXCollections.observableArrayList(liste_cours);
+            table_cours.setItems(liste_cours_visibles);
+        });
         
         VBox table_vb = new VBox(table_cours);
         table_vb.setAlignment(Pos.CENTER);
@@ -69,14 +90,10 @@ public class Client_fx extends Application{
         gauche.getChildren().add(new Separator(Orientation.HORIZONTAL));
         
         //Combo Box:
-        String[] sessions = {"Hiver","Ete","Automne"};
-        ComboBox<String> combo_sessions = new ComboBox<String>(
-            FXCollections.observableArrayList(sessions));
-        combo_sessions.setValue("Hiver");
         combo_sessions.setPrefWidth(110);
+        combo_sessions.setValue("Hiver");
         
         //Buttons:
-        Button charger = new Button("charger");
 
         Label envoyer_lab = new Label("");
         envoyer_lab.setPrefWidth(70);
@@ -86,7 +103,7 @@ public class Client_fx extends Application{
         envoyer_hb.setAlignment(Pos.CENTER);
 
 
-        HBox bas_gauche = new HBox(combo_sessions,charger);
+        HBox bas_gauche = new HBox(combo_sessions,boutonCharger);
         bas_gauche.setAlignment(Pos.CENTER);
         gauche.getChildren().add(bas_gauche);
         bas_gauche.setSpacing(50);
@@ -131,8 +148,19 @@ public class Client_fx extends Application{
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+    public ComboBox<String> getComboBox(){
+        return combo_sessions;
+    }
+
+
 
     public static void main(String[] args){
         Client_fx.launch(args);
+        try {
+            Server server = new Server(80);
+            server.run();
+        } catch(IOException e){
+            System.out.println("Erreur à la connexion.");
+        }
     }
 }

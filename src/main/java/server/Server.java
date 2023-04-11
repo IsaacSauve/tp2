@@ -184,19 +184,20 @@ public class Server {
     public void handleLoadCourses(String arg) {
         // TODO: implémenter cette méthode
 
-        switch(arg){
-            case "1":
-                arg = "Automne";
-                break;
+        if(arg.length() == 1){
+            switch(arg) {
+                case "1":
+                    arg = "Automne";
+                    break;
 
-            case "2":
-                arg = "Hiver";
-                break;
-            
-            case "3":
-                arg = "Ete";
-                break;
-            
+                case "2":
+                    arg = "Hiver";
+                    break;
+
+                case "3":
+                    arg = "Ete";
+                    break;
+            }
         }
 
         try {

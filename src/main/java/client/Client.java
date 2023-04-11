@@ -58,6 +58,7 @@ public class Client {
 
             oos.writeObject(LOAD_COMMAND + line);
             oos.flush();
+
             switch(line){
                 
                 case "1": line = "automne"; break;
