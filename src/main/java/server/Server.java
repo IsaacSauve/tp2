@@ -151,7 +151,7 @@ public class Server {
      * Méthode pour fermer toutes les connexions, c'est-à-dire celle du client
      * et celles des "streams". 
      * 
-     * @throws IOException Une erreur en cas de fermeture des connexions
+     * @throws IOException Une erreur en cas de fermeture des connexions.
      */
     public void disconnect() throws IOException {
         objectOutputStream.close();
@@ -260,6 +260,12 @@ public class Server {
         }
         
     }
+
+    /**
+     * Initialise le serveur.
+     * @param args  Arguments passés en lignes de commandes.
+     * @throws IOException  Erreur d'entrée/sortie en général.
+     */
     public static void main(String[] args) throws IOException{
         Server server = new Server(80);
         server.run();

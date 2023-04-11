@@ -11,13 +11,34 @@ import java.util.Scanner;
 import server.models.Course;
 import server.models.RegistrationForm;
 
+/**
+ * La classe Client permet de se connecter au serveur, de recevoir des
+ * données du serveur et d'envoyer des données à celui-ci, pour obtenir la liste de cours disponibles
+ * pour une session désirée et de s'inscrire à un de ces cours.
+ */
 public class Client {
 
-    ObjectOutputStream oos; 
-    ObjectInputStream ois; 
+    /**
+     * Pour envoyer des données au serveur.
+     */
+    ObjectOutputStream oos;
+    /**
+     * Pour recevoir des données du serveur.
+     */
+    ObjectInputStream ois;
+    /**
+     * Le socket pour la connexion avec le serveur.
+     */
     Socket clientSocket;
-    
-    
+
+    /**
+     * Cette méthode permet de recevoir et d'afficher la liste de cours du fichier cours.txt pour une
+     * session donnée en envoyant une requête au serveur.
+     * Le client interagit en choisissant la session, pour y voir les cours disponibles.
+     * @param scan  Pour lire les informations entrées par le client.
+     * @return un ArrayList de Course contenant les différents cours disponibles pour la session désirée
+     * @throws IOException  Erreur d'entrée/sortie en général.
+     */
     public ArrayList<Course> charger(Scanner scan) throws IOException{
         String messageConsultation = "Veuillez choisir la session pour " +
         "laquelle vous voulez consulter la liste des cours: \n 1.Automne \n " +
@@ -59,16 +80,24 @@ public class Client {
                 }
                 System.out.print("\n");
 
-                //*********************
                 return liste_cours;
                 
             }catch(ClassNotFoundException e){
                 System.out.println("Erreur classe non-trouvée.");
             }
 
-        //*********************
         return null;
     }
+
+    /**
+     * La méthode permet de faire l'inscription d'un individu à un cours désiré en envoyant une
+     * requête au serveur. La méthode permet également de valider
+     * l'adresse courriel et le matricule de l'individu ainsi que de vérifier que le cours sélectionné
+     * est disponible.
+     * @param scan  Pour lire les informations entrée par le client.
+     * @param liste_cours   Un ArrayList de Course pour la session désirée.
+     * @throws IOException  Erreur d'entrée/sortie en général.
+     */
     public void inscrire(Scanner scan, ArrayList<Course> liste_cours)throws IOException{
         clientSocket = new Socket("127.0.0.1",80);
         oos = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -186,11 +215,21 @@ public class Client {
 
     }
 
+    /**
+     * Méthode pour fermer la connexion avec le serveur et celles des streams.
+     * @throws IOException  Erreur d'entrée/sortie en général.
+     */
     public void deconnecter() throws IOException{
         oos.close();
         ois.close();
         clientSocket.close();
     }
+
+    /**
+     * Initialisation du client et permet de consulter la liste de cours de la session désirée pour
+     * par la suite donner le choix entre une nouvelle consultation ou une inscription.
+     * @param args Arguments passés en lignes de commandes.
+     */
 
     public static void main(String[] args){
         Client client = new Client();
@@ -217,11 +256,9 @@ public class Client {
                 }
                 if (choix.equals("2")){
                     client.inscrire(scan, listeCours);
+                    break;
                 }
 
-                if (choix.equals("exit")){
-                    break;    
-                }
                 System.out.println("> Choix: ");
                 System.out.print("1. Consulter les cours offerts pour une " +
                 "autre session \n2. Inscription à un cours: \n > Choix: ");
