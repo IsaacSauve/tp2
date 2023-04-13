@@ -9,10 +9,22 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * La classe Controleur permet de faire l'interaction entre l'interface Client_fx ainsi que les models Course et
+ * RegistrationForm. Tout comme la classe Client, elle envoie des données et en reçoit pour obtenir la liste de cours
+ * disponibles pour une session désirée et pour s'inscrire à un de ces cours.
+ */
 public class Controleur {
 
+    /**
+     * Pour interagir avec l'affichage du formulaire.
+     */
     private Client_fx vue;
 
+    /**
+     * Constructeur pour initialiser la vue.
+     * @param vue   Affichage du formulaire
+     */
     public Controleur(Client_fx vue){
         this.vue = vue;
     }
@@ -29,6 +41,12 @@ public class Controleur {
      */
     Socket clientSocket;
 
+    /**
+     * Cette méthode permet de recevoir et d'afficher la liste de cours du fichier cours.txt pour une
+     * session donnée en envoyant une requête au serveur.
+     * Le client interagit en choisissant la session, pour y voir les cours disponibles.
+     * @return  un ArrayList de Course contenant les différents cours disponibles pour la session désirée
+     */
     public ArrayList<Course> charger(){
 
         try {
@@ -58,6 +76,12 @@ public class Controleur {
         return null;
     }
 
+    /**
+     * Cette méthode permet de valider l'adresse courriel entrée par le client. Elle doit être de la forme
+     * "caracteres@caracteres.caracteres".
+     * @param email L'adresse courriel à valider
+     * @return  Vrai ou faux selon la validité de l'adresse courriel
+     */
     public boolean validerEmail(String email){
 
         String[] emailVerif1 = email.split("@");
@@ -80,6 +104,11 @@ public class Controleur {
         return true;
     }
 
+    /**
+     * Cette méthode permet de valider le matricule entré par le client qui doit contenir 8 chiffres.
+     * @param matricule Le matricule à valider
+     * @return  Vrai ou faux selon la validité du matricule
+     */
     public boolean validerMatricule(String matricule){
 
         try{
@@ -94,6 +123,14 @@ public class Controleur {
 
         return true;
     }
+
+    /**
+     * La méthode permet de faire l'inscription d'un individu à un cours désiré en envoyant une
+     * requête au serveur. La méthode permet également de valider
+     * l'adresse courriel et le matricule de l'individu ainsi que de vérifier que le cours sélectionné
+     * est disponible.
+     * @return Message d'alerte approprié
+     */
     public String inscrire(){
 
         try {

@@ -90,6 +90,12 @@ public class Client {
         return null;
     }
 
+    /**
+     * Cette méthode permet de valider l'adresse courriel entrée par le client. Elle doit être de la forme
+     * "caracteres@caracteres.caracteres".
+     * @param email L'adresse courriel à valider
+     * @return  Vrai ou faux selon la validité de l'adresse courriel
+     */
     public boolean validerEmail(String email){
 
         String[] emailVerif1 = email.split("@");
@@ -105,13 +111,18 @@ public class Client {
         String[] emailVerif = {emailVerif1[0], emailVerif2[0], emailVerif2[1]};
         
         for (String partieEmail : emailVerif){
-            if (partieEmail == ""){
+            if (partieEmail.equals("")){
                 return false;
             }
         }
         return true;
     }
 
+    /**
+     * Cette méthode permet de valider le matricule entré par le client qui doit contenir 8 chiffres.
+     * @param matricule Le matricule à valider
+     * @return  Vrai ou faux selon la validité du matricule
+     */
     public boolean validerMatricule(String matricule){
 
         try{
@@ -120,11 +131,7 @@ public class Client {
             return false;
         }
 
-        if (matricule.length() != 8){
-            return false;
-        }
-
-        return true;
+        return matricule.length() == 8;
     }
 
     /**
@@ -185,9 +192,6 @@ public class Client {
             matricule = scan.nextLine();
         }
 
-
-        //On assume que le code du cours est invalide jusqu'à preuve du contraire.
-
         boolean codeValide =false;
 
         while (!codeValide){
@@ -196,7 +200,6 @@ public class Client {
 
             String code = scan.nextLine();
 
-            //Verifier si c'est la liste de tous les cours ou ceux de la session seulement
             for(Course cours: liste_cours){
                 if (cours.getCode().equals(code)){
 

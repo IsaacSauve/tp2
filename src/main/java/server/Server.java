@@ -59,7 +59,7 @@ public class Server {
      *"EventHandler" et ajouter ceux-ci dans le tableau "handlers".
      *
      * @param port  Port sur lequel le serveur va être créé.
-     * @throws IOException  Erreur d'entrée/sortie en générale.
+     * @throws IOException  Erreur d'entrée/sortie en général.
      */
     public Server(int port) throws IOException {
         this.server = new ServerSocket(port, 1);
@@ -77,7 +77,7 @@ public class Server {
     }
 
     /**
-     * Cette méthode informe les "EventHandlers" que la commande reçu en paramètre doit être traîtée.
+     * Cette méthode informe les "EventHandlers" que la commande reçue en paramètre doit être traitée.
      *
      * @param cmd   Une chaîne de caractères représentant la commande du client.
      * @param arg   Une chaîne de caractères représentant pour quelle session le

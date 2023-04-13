@@ -1,2 +1,1 @@
-Automne	IFT2255	12345678	Michalis	Famelis	mfamelis@iro.umontreal.ca 
-Hiver	IFT1025	12345678	I	S	i@a.c
+Automne	IFT2255	12345678	Michalis	Famelis	mfamelis@iro.umontreal.ca

@@ -26,28 +26,67 @@ import server.models.Course;
 
 import java.util.ArrayList;
 
+/**
+ * La classe Client_fx permet de définir l'affichage du formulaire.
+ */
 public class Client_fx extends Application{
 
-    String[] sessions = {"Hiver","Ete","Automne"};
-    ComboBox<String> combo_sessions = new ComboBox<String>(
+    /**
+     * Les sessions contenues dans le comboBox.
+     */
+    private final String[] sessions = {"Hiver","Ete","Automne"};
+
+    /**
+     *Le comboBox contenant les sessions disponibles.
+     */
+    private final ComboBox<String> combo_sessions = new ComboBox<>(
             FXCollections.observableArrayList(sessions));
 
-    private Button boutonCharger = new Button("charger");
-    private Button boutonEnvoyer = new Button("envoyer");
-    
-    private TextField prenom_txt = new TextField();
-    private TextField nom_txt = new TextField();
-    private TextField email_txt = new TextField();
-    private TextField mat_txt = new TextField();
+    /**
+     *Bouton ayant comme fonction de charger la liste de cours.
+     */
+    private final Button boutonCharger = new Button("charger");
+    /**
+     * Bouton ayant comme fonction d'envoyer le formulaire.
+     */
+    private final Button boutonEnvoyer = new Button("envoyer");
+    /**
+     * Champ de texte du prénom.
+     */
+    private final TextField prenom_txt = new TextField();
+    /**
+     * Champ de texte du nom.
+     */
+    private final TextField nom_txt = new TextField();
+    /**
+     * Champ de texte de l'adresse courriel.
+     */
+    private final TextField email_txt = new TextField();
+    /**
+     * Champ de texte du matricule.
+     */
+    private final TextField mat_txt = new TextField();
+    /**
+     * Tableau contenant les cours de la session sélectionnée.
+     */
+    private final TableView<Course> table_cours = new TableView<>();
+    /**
+     * Controleur permettant l'interaction des boutons.
+     */
+    private final Controleur controleur = new Controleur(this);
+    /**
+     * Alerte lorsqu'il y a une erreur dans le formulaire.
+     */
+    private final Alert formInvalide = new Alert(AlertType.ERROR);
+    /**
+     * Message confirmant l'inscription du client à un cours.
+     */
+    private final Alert formValide = new Alert(AlertType.INFORMATION);
 
-    private TableView<Course> table_cours = new TableView<Course>();
-
-    private Controleur controleur = new Controleur(this);
-
-    private Alert formInvalide = new Alert(AlertType.ERROR);
-    private Alert formValide = new Alert(AlertType.INFORMATION);
-
-
+    /**
+     * Méthode permettant de créer l'affichage de l'interface et d'ajouter de l'interaction avec les boutons.
+     * @param primaryStage  La fenêtre d'affichage
+     */
     public void start(Stage primaryStage){
         HBox root = new HBox();
         VBox gauche = new VBox();
@@ -168,28 +207,64 @@ public class Client_fx extends Application{
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
+    /**
+     * Getter pour le ComboBox contenant les sessions.
+     * @return  ComboBox contenant les sessions
+     */
     public ComboBox<String> getComboBox(){
         return combo_sessions;
     }
+
+    /**
+     * Getter pour le champ de texte contenant le prénom.
+     * @return  Champ de texte contenant le prénom
+     */
     public TextField getPrenomTxt(){
         return prenom_txt;     
     }
+    /**
+     * Getter pour le champ de texte contenant le nom.
+     * @return  Champ de texte contenant le nom
+     */
     public TextField getNomTxt(){
         return nom_txt;
     }
+    /**
+     * Getter pour le champ de texte contenant l'adresse courriel.
+     * @return  Champ de texte contenant l'adresse courriel
+     */
     public TextField getEmailTxt(){
         return email_txt;
     }
+    /**
+     * Getter pour le champ de texte contenant le matricule.
+     * @return  Champ de texte contenant le matricule
+     */
     public TextField getMatriculeTxt(){
         return mat_txt;
     }
+
+    /**
+     * Getter pour le tableau contenant les cours de la session sélectionnée.
+     * @return Tableau contenant les cours de la session sélectionnée.
+     */
     public TableView<Course> getTableCours(){
         return table_cours;
     }
+
+    /**
+     * Getter pour le cours sélectionné dans le tableau.
+     * @return  Le cours sélectionné dans le tableau
+     */
     public Course getSelectionCours(){
         return table_cours.getSelectionModel().getSelectedItem();
     }
 
+    /**
+     * Méthode permettant de réinitialiser la couleur des champs de texte et du tableau
+     * contenant les cours de la session sélectionnée.
+     */
     public void resetColor(){
         
         prenom_txt.setStyle(null);
@@ -199,6 +274,10 @@ public class Client_fx extends Application{
         table_cours.setStyle(null);
     }
 
+    /**
+     * Méthode principale pour exécuter l'interface graphique Client_fx.
+     * @param args Arguments passés en lignes de commandes
+     */
     public static void main(String[] args){
         Client_fx.launch(args);
     }
