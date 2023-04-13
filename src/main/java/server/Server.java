@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.io.EOFException;
 import java.io.File;
 
 import server.models.Course;
@@ -254,11 +255,13 @@ public class Server {
                 System.out.println("Erreur à l'écriture du fichier");
             }
 
+        } catch(EOFException e){
+            System.out.println("Erreur à l'écriture de l'objet");
         } catch (IOException e) {
             System.out.println("Erreur à la lecture de l'objet");
         } catch (ClassNotFoundException e) {
             System.out.println("Erreur. La classe n'a pas été trouvée.");
-        }
+        } 
         
     }
 

@@ -90,6 +90,43 @@ public class Client {
         return null;
     }
 
+    public boolean validerEmail(String email){
+
+        String[] emailVerif1 = email.split("@");
+        if (emailVerif1.length !=2){
+            return false;
+        }
+        String[] emailVerif2 = emailVerif1[1].split("\\.");
+        
+        if (emailVerif2.length !=2){
+            return false;
+        }
+
+        String[] emailVerif = {emailVerif1[0], emailVerif2[0], emailVerif2[1]};
+        
+        for (String partieEmail : emailVerif){
+            if (partieEmail == ""){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean validerMatricule(String matricule){
+
+        try{
+            Integer.parseInt(matricule);
+        } catch(NumberFormatException e){
+            return false;
+        }
+
+        if (matricule.length() != 8){
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * La méthode permet de faire l'inscription d'un individu à un cours désiré en envoyant une
      * requête au serveur. La méthode permet également de valider
@@ -106,98 +143,63 @@ public class Client {
 
         String REGISTER_COMMAND = "INSCRIRE";
 
-        oos.writeObject(REGISTER_COMMAND );
+        oos.writeObject(REGISTER_COMMAND);
         oos.flush();
 
         System.out.print("Veuillez saisir votre prénom: ");
 
         String prenom = scan.nextLine();
 
+        while(prenom.equals("")){
+            System.out.print("Erreur, vous devez entrer un prénom. \n" + 
+            "Veuillez saisir votre prénom: ");
+            prenom = scan.nextLine();
+        }
+
         System.out.print("Veuillez saisir votre nom: ");
 
         String nom = scan.nextLine();
-
-
-
-        //On assume que le email n'est pas valide jusqu'à preuve du contraire.
-
-        boolean emailValide = false;
-
-        String email = "temporaire";
-
-
-        while (emailValide==false){
-
-            System.out.print("Veuillez saisir votre email: ");
-
-            String emailPossible = scan.nextLine();
-
-            String[] emailVerif = emailPossible.split("@");
-
-            if (emailVerif.length==2){
-
-                String[] emailVerif2=emailVerif[1].split("\\.");
-
-                if (emailVerif2.length==2 && emailVerif2[0] != null && emailVerif2[1] != null){
-                    email=emailPossible;
-                    emailValide = true;
-                }
-                else {
-                    System.out.println("Email invalide.");
-                }
-            }
-            else {
-                System.out.println("Email invalide.");
-            }
+        while(nom.equals("")){
+            System.out.print("Erreur, vous devez entrer un nom. \n" + 
+            "Veuillez saisir votre nom: ");
+            nom = scan.nextLine();
         }
 
 
+        System.out.print("Veuillez saisir votre email: ");
+        String email = scan.nextLine();
 
-        //On assume que le matricule n'est pas valide jusqu'à preuve du contraire.
+        while(!validerEmail(email)){
 
-        boolean matriculeValide = false;
-
-        String matricule = "Temporaire";
-
-        while (matriculeValide==false){
-
-            System.out.print("Veuillez saisir votre matricule: ");
-
-            String matriculePossible = scan.nextLine();
-
-            // Vérification que c'est bien un entier de 8 caractères:
-            try {
-                Integer.parseInt(matriculePossible);
-            } catch (NumberFormatException e) {
-                System.out.println("Matricule invalide.");
-                continue;
-            }
-
-            if (matriculePossible.length()==8){
-
-                matricule=matriculePossible;
-                matriculeValide=true;
-            }
-            else {
-                System.out.println("Matricule invalide.");
-            }
+            System.out.print("Erreur, l'adresse courriel est invalide. \n" +
+            "Veuillez saisir votre email: ");
+            email = scan.nextLine();
         }
+
+        System.out.print("Veuillez saisir votre matricule: ");
+        String matricule = scan.nextLine();
+
+        while (!validerMatricule(matricule)){
+            System.out.print("Erreur, le matricule est invalide. \n" + 
+            "Veuillez saisir votre matricule: ");
+            matricule = scan.nextLine();
+        }
+
 
         //On assume que le code du cours est invalide jusqu'à preuve du contraire.
 
         boolean codeValide =false;
 
-        while (codeValide==false){
+        while (!codeValide){
 
             System.out.print("Veuillez saisir le code du cours: ");
 
-            String codePossible = scan.nextLine();
+            String code = scan.nextLine();
 
             //Verifier si c'est la liste de tous les cours ou ceux de la session seulement
             for(Course cours: liste_cours){
-                if (cours.getCode().equals(codePossible)){
+                if (cours.getCode().equals(code)){
 
-                    String code=codePossible;
                     String nomCours= cours.getName();
                     String session = cours.getSession();
                     Course course = new Course(nomCours, code, session);
@@ -207,9 +209,8 @@ public class Client {
                     System.out.println("Félicitations! Inscription réussie de " + prenom + " au cours " + code + " .");
                     codeValide=true;
                 }
-
             }
-            if (codeValide==false){
+            if (!codeValide){
                 System.out.println("Le cours ne fait pas partie de liste de cours disponible.");
             }
         }
@@ -231,7 +232,7 @@ public class Client {
      * par la suite donner le choix entre une nouvelle consultation ou une inscription.
      * @param args Arguments passés en lignes de commandes.
      */
-
+    
     public static void main(String[] args){
         Client client = new Client();
         Scanner scan = new Scanner(System.in);
